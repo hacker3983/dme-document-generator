@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DME Document Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .line-item-row {
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .remove-item-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      float: right;
+    }
+    .remove-item-btn:hover { background: #c0392b; }
+    .add-item-btn {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+    .add-item-btn:hover { background: #219653; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand-mark">DME</div>
+      <div><h1>Dujohn Mobile Essentials</h1><p>Document Generator · Local Edition</p></div>
+    </header>
+
+    <section class="intro">
+      <p class="eyebrow">INTERNAL BUSINESS TOOL</p>
+      <h2>Create a document</h2>
+      <p>Select document type and enter details below to generate a downloadable PDF.</p>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}<div class="alert">{{ message }}</div>{% endfor %}
+    {% endwith %}
+
+    <form action="{{ url_for('main.generate') }}" method="post" class="panel">
+      <div class="section-heading"><h3>Document details</h3><span>Required fields marked *</span></div>
+
+      <div class="grid three">
+        <label>Document Type
+          <select name="doc_type">
+            <option value="invoice">Invoice (DME-INV)</option>
+            <option value="pro_forma">Pro Forma Invoice (DME-PF)</option>
+            <option value="quote">Quote (DME-QT)</option>
+          </select>
+        </label>
+        <label>Customer name *<input name="customer_name" required maxlength="100" placeholder="e.g. George Thompson"></label>
+        <label>Issue date *<input type="date" name="issue_date" value="{{ today }}" required></label>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+      <div class="section-heading"><h3>Line Items</h3><span>At least one required</span></div>
+
+      <div id="line-items-container">
+        <div class="line-item-row">
+          <button type="button" class="remove-item-btn" onclick="removeItem(this)" style="display:none;">Remove</button>
+          <label>Description *<textarea name="description[]" required rows="2" maxlength="500" placeholder="e.g. Samsung Galaxy A16 5G — screen replacement labour"></textarea></label>
+          <div class="grid three" style="margin-top: 8px;">
+            <label>Quantity<input type="number" name="quantity[]" min="0.01" step="0.01" value="1" required></label>
+            <label>Unit price<input type="number" name="unit_price[]" min="0" step="0.01" placeholder="7000.00" required></label>
+            <label>Currency<select name="currency"><option value="JMD">JMD — Jamaican Dollar</option><option value="USD">USD — US Dollar</option></select></label>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="add-item-btn" onclick="addItem()">+ Add another item</button>
+
+      <div class="grid two" style="margin-top: 15px;">
+        <label>Payment status<select name="payment_status"><option value="unpaid">Unpaid</option><option value="partially paid">Partially paid</option><option value="paid">Paid</option></select></label>
+        <label>Notes & Terms (optional)<textarea name="notes" rows="3" maxlength="1000" placeholder="Additional information or terms"></textarea></label>
+      </div>
+      <div class="actions" style="margin-top: 20px;"><button type="submit">Generate PDF</button></div>
+    </form>
+    <footer> Dujohn Mobile Essentials · Jamaica </footer>
+  </main>
+
+  <script>
+    function addItem() {
+      const container = document.getElementById('line-items-container');
+      const firstRow = container.querySelector('.line-item-row');
+      const newRow = firstRow.cloneNode(true);
+
+      newRow.querySelector('textarea').value = '';
+      newRow.querySelectorAll('input')[0].value = '1';
+      newRow.querySelectorAll('input')[1].value = '';
+
+      container.appendChild(newRow);
+      updateRemoveButtons();
+    }
+
+    function removeItem(btn) {
+      btn.closest('.line-item-row').remove();
+      updateRemoveButtons();
+    }
+
+    function updateRemoveButtons() {
+      const rows = document.querySelectorAll('.line-item-row');
+      rows.forEach((row) => {
+        const removeBtn = row.querySelector('.remove-item-btn');
+        removeBtn.style.display = rows.length === 1 ? 'none' : 'block';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+:root { color-scheme: light; --ink:#151515; --muted:#686868; --line:#dedede; --paper:#fff; --wash:#f5f5f5; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--wash); color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+.page { width:min(900px, calc(100% - 32px)); margin:36px auto; }
+.topbar { display:flex; align-items:center; gap:14px; padding:18px 0 24px; border-bottom:1px solid var(--line); }
+.brand-mark { width:54px; height:54px; display:grid; place-items:center; background:#111; color:#fff; font-weight:800; letter-spacing:1px; }
+h1 { margin:0; font-size:19px; } .topbar p,.intro p,footer { color:var(--muted); }
+.topbar p { margin:5px 0 0; font-size:12px; }
+.intro { padding:28px 0 18px; } .eyebrow { font-size:10px; letter-spacing:1.7px; font-weight:bold; }
+.intro h2 { margin:8px 0; font-size:27px; } .intro p:last-child { font-size:14px; }
+.panel { background:var(--paper); border:1px solid var(--line); padding:26px; }
+.section-heading { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:22px; }
+.section-heading h3 { margin:0; font-size:16px; } .section-heading span { color:var(--muted); font-size:11px; }
+label { display:block; margin-bottom:18px; font-size:12px; font-weight:700; }
+input,textarea,select { display:block; width:100%; margin-top:8px; padding:12px; border:1px solid #ccc; border-radius:3px; background:#fff; color:var(--ink); font:14px Arial,sans-serif; }
+textarea { resize:vertical; } input:focus,textarea:focus,select:focus { outline:2px solid #999; outline-offset:1px; }
+.grid { display:grid; gap:16px; } .two { grid-template-columns:repeat(2,minmax(0,1fr)); } .three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.actions { display:flex; justify-content:flex-end; border-top:1px solid var(--line); padding-top:20px; }
+button { border:0; border-radius:3px; background:#111; color:#fff; padding:14px 20px; font-size:13px; font-weight:bold; cursor:pointer; }
+button:hover { background:#333; } .alert { background:#fff2f0; border:1px solid #e2b8b2; padding:12px 14px; margin:0 0 16px; font-size:13px; }
+footer { padding:20px 0; text-align:center; font-size:11px; }
+@media(max-width:650px) { .page { margin:18px auto; } .panel { padding:18px; } .two,.three { grid-template-columns:1fr; gap:0; } .section-heading { align-items:flex-start; flex-direction:column; } .actions button { width:100%; } }
